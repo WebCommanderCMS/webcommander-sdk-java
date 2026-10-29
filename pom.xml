@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.webcommander</groupId>
+    <artifactId>webcommander</artifactId>
+    <!-- maven-jar-plugin writes the version into the manifest that SdkConfig.SDK_VERSION reads. -->
+    <version>4.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>WebCommander</name>
+    <description>Java SDK for the WebCommander v4 REST API.</description>
+    <url>https://github.com/WebCommanderCMS/webcommander-sdk-java</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>https://github.com/WebCommanderCMS/webcommander-sdk-java</url>
+        <connection>scm:git:https://github.com/WebCommanderCMS/webcommander-sdk-java.git</connection>
+        <developerConnection>scm:git:https://github.com/WebCommanderCMS/webcommander-sdk-java.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>WebCommander</name>
+            <organization>WebCommander</organization>
+            <organizationUrl>https://www.webcommander.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <okhttp.version>4.12.0</okhttp.version>
+        <!-- Imported as a BOM: do not put a version on an individual Jackson artifact. -->
+        <jackson.version>2.22.2</jackson.version>
+        <!-- The version okhttp ${okhttp.version} resolves to; change them together. -->
+        <okio.version>3.6.0</okio.version>
+        <slf4j.version>2.0.13</slf4j.version>
+        <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
+        <junit.version>5.10.2</junit.version>
+        <!-- Live test selection: empty runs nothing; set it with -Dwc.live or -Plive. -->
+        <wc.live></wc.live>
+        <!-- Verbose output selection, in the same form as wc.live. -->
+        <wc.test.verbose></wc.test.verbose>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- OkHttp, for connectionPool().evictAll(), which the JDK HTTP client does not expose. -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>${okhttp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio-jvm</artifactId>
+            <version>${okio.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+        </dependency>
+        <!-- Logging facade only; the host application chooses the binding. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Found through ServiceLoader, so it is listed under usedDependencies below. -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <targetPath>META-INF</targetPath>
+                <filtering>false</filtering>
+                <includes>
+                    <include>LICENSE</include>
+                    <include>README.md</include>
+                </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <!-- Local *Driver.java and *Live.java files are gitignored and kept out of the build. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+                <configuration>
+                    <testExcludes>
+                        <testExclude>**/*Driver.java</testExclude>
+                        <testExclude>**/*Live.java</testExclude>
+                    </testExcludes>
+                    <!-- serial, this-escape (JDK 21 only) and try (the token-lock scopes) are off. -->
+                    <showWarnings>true</showWarnings>
+                    <compilerArgs>
+                        <arg>-Xlint:all,-serial,-this-escape,-try</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <!-- Pinned, so mvn -o uses a version already downloaded. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <wc.live>${wc.live}</wc.live>
+                        <wc.test.verbose>${wc.test.verbose}</wc.test.verbose>
+                    </systemPropertyVariables>
+                    <properties>
+                        <configurationParameters>
+                            <!-- One case at a time: the cases write to a shared store. -->
+                            junit.jupiter.execution.parallel.enabled = false
+                        </configurationParameters>
+                    </properties>
+                </configuration>
+            </plugin>
+            <!-- ServiceLoader-only dependencies, which byte-code analysis cannot see. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <usedDependencies>
+                        <usedDependency>org.slf4j:slf4j-simple</usedDependency>
+                        <usedDependency>org.junit.jupiter:junit-jupiter-engine</usedDependency>
+                    </usedDependencies>
+                </configuration>
+            </plugin>
+            <!-- Writes the manifest SdkConfig.SDK_VERSION reads; without it the version is 0.0.0+source. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <!-- Fails mvn verify on any Javadoc error; -missing allows an undocumented member. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <configuration>
+                    <show>protected</show>
+                    <doclint>all,-missing</doclint>
+                    <failOnWarnings>true</failOnWarnings>
+                    <additionalOptions>
+                        <additionalOption>-Xmaxwarns 10000</additionalOption>
+                    </additionalOptions>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>strict-public-docs</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>javadoc</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.7</version>
+                <configuration>
+                    <signer>bc</signer>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.9.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>central</publishingServerId>
+                    <autoPublish>false</autoPublish>
+                    <waitUntil>validated</waitUntil>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <!-- Runs the whole live suite against the store .env points at. -->
+        <profile>
+            <id>live</id>
+            <properties>
+                <wc.live>all</wc.live>
+            </properties>
+        </profile>
+    </profiles>
+</project>
