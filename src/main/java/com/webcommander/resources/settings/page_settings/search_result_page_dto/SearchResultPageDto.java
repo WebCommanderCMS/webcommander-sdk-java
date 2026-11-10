@@ -211,4 +211,14 @@ public final class SearchResultPageDto {
             return "search_result_page";
         }
     }
+
+    /** The reindex's answer: {@code status} {@code accepted}, {@code clean} and a {@code message}. */
+    public static final class SearchReindex extends Dto {
+
+        public String status;
+
+        public Boolean clean;
+
+        public String message;
+    }
 }

@@ -7,7 +7,7 @@
     <groupId>com.webcommander</groupId>
     <artifactId>webcommander</artifactId>
     <!-- maven-jar-plugin writes the version into the manifest that SdkConfig.SDK_VERSION reads. -->
-    <version>4.0.0</version>
+    <version>4.0.1</version>
     <packaging>jar</packaging>
 
     <name>WebCommander</name>
@@ -47,10 +47,6 @@
         <slf4j.version>2.0.13</slf4j.version>
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
         <junit.version>5.10.2</junit.version>
-        <!-- Live test selection: empty runs nothing; set it with -Dwc.live or -Plive. -->
-        <wc.live></wc.live>
-        <!-- Verbose output selection, in the same form as wc.live. -->
-        <wc.test.verbose></wc.test.verbose>
     </properties>
 
     <dependencyManagement>
@@ -133,39 +129,16 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Local *Driver.java and *Live.java files are gitignored and kept out of the build. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <testExcludes>
-                        <testExclude>**/*Driver.java</testExclude>
-                        <testExclude>**/*Live.java</testExclude>
-                    </testExcludes>
                     <!-- serial, this-escape (JDK 21 only) and try (the token-lock scopes) are off. -->
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
                         <arg>-Xlint:all,-serial,-this-escape,-try</arg>
                     </compilerArgs>
-                </configuration>
-            </plugin>
-            <!-- Pinned, so mvn -o uses a version already downloaded. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
-                    <systemPropertyVariables>
-                        <wc.live>${wc.live}</wc.live>
-                        <wc.test.verbose>${wc.test.verbose}</wc.test.verbose>
-                    </systemPropertyVariables>
-                    <properties>
-                        <configurationParameters>
-                            <!-- One case at a time: the cases write to a shared store. -->
-                            junit.jupiter.execution.parallel.enabled = false
-                        </configurationParameters>
-                    </properties>
                 </configuration>
             </plugin>
             <!-- ServiceLoader-only dependencies, which byte-code analysis cannot see. -->
@@ -267,13 +240,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <!-- Runs the whole live suite against the store .env points at. -->
-        <profile>
-            <id>live</id>
-            <properties>
-                <wc.live>all</wc.live>
-            </properties>
-        </profile>
-    </profiles>
 </project>

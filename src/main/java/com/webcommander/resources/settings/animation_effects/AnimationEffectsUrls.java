@@ -10,4 +10,7 @@ public final class AnimationEffectsUrls {
 
     public static final String ANIMATION_EFFECTS_SECTION =
             "/api/{api_version}/admin/settings/animation_effects/{section}";
+
+    public static final String ANIMATION_EFFECTS_CUSTOM_LOADER =
+            "/api/{api_version}/admin/settings/animation_effects/custom_loader";
 }

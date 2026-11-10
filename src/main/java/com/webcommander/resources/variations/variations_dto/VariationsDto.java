@@ -137,6 +137,8 @@ public final class VariationsDto {
 
         public Double salePrice;
 
+        public Double compareAtPrice;
+
         public Boolean isOnSale;
 
         public String saleAmountType;
@@ -386,5 +388,100 @@ public final class VariationsDto {
         public String message;
 
         public Long totalVariants;
+    }
+
+    /**
+     * One variant read alone, under {@code variation}. It is on or off as {@code active}, where
+     * the list and the bulk write say {@code available}; {@code options} name one label per type.
+     */
+    public static final class ProductVariantDetail extends Dto {
+
+        public Long variationId;
+
+        public String name;
+
+        public String sku;
+
+        public String customSku;
+
+        public String barcode;
+
+        public String countryOfOrigin;
+
+        public String hsCode;
+
+        public Boolean active;
+
+        public List<ProductVariantOptionReference> options;
+
+        public ProductVariantPricing pricing;
+
+        public ProductVariantInventory inventory;
+
+        public ProductVariantOrdering ordering;
+
+        public String transactionNo;
+
+        public String url;
+
+        @Override
+        protected String envelopeKey() {
+            return "variation";
+        }
+    }
+
+    /**
+     * The single-variant patch's body, no envelope; partial. The variant is turned on or off as
+     * {@code available}.
+     */
+    public static final class ProductVariantPatchInput extends Dto {
+
+        public Boolean available;
+
+        public String name;
+
+        public String sku;
+
+        public String customSku;
+
+        public String barcode;
+
+        public String countryOfOrigin;
+
+        public String hsCode;
+
+        public ProductVariantPricing pricing;
+
+        public ProductVariantInventory inventory;
+
+        public ProductVariantOrdering ordering;
+    }
+
+    /** The variant as the single-variant patch answers it: its ids and codes. */
+    public static final class ProductVariantPatched extends Dto {
+
+        public Long variationId;
+
+        public String name;
+
+        public String sku;
+
+        public String customSku;
+
+        public String barcode;
+
+        public String countryOfOrigin;
+
+        public String hsCode;
+    }
+
+    /** The single-variant patch's answer: {@code status}, {@code message} and the variation. */
+    public static final class ProductVariantPatchResult extends Dto {
+
+        public String status;
+
+        public String message;
+
+        public ProductVariantPatched variation;
     }
 }

@@ -15,6 +15,9 @@ public final class VariationsUrls {
     public static final String PRODUCT_VARIATIONS =
             "/api/{api_version}/admin/products/{product_id}/variations";
 
+    public static final String PRODUCT_VARIATION =
+            "/api/{api_version}/admin/products/{product_id}/variations/{variation_id}";
+
     public static final String PRODUCT_VARIATIONS_BULK =
             "/api/{api_version}/admin/products/{product_id}/variations/bulk";
 

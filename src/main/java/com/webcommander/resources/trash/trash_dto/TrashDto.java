@@ -111,4 +111,31 @@ public final class TrashDto {
 
         public List<TrashBulkItemInput> items;
     }
+
+    /**
+     * One link outside the store: the {@code system}, its {@code entity} and {@code external_id},
+     * a {@code name} and the {@code reason} it blocks a permanent delete.
+     */
+    public static final class TrashExternalLink extends Dto {
+
+        public String system;
+
+        public String entity;
+
+        public String name;
+
+        public String externalId;
+
+        public String reason;
+    }
+
+    /** The external links of one trashed item: its {@code type} and {@code id}, and the links. */
+    public static final class TrashExternalLinks extends Dto {
+
+        public String type;
+
+        public Long id;
+
+        public List<TrashExternalLink> links;
+    }
 }

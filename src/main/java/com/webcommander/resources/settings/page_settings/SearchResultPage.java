@@ -215,4 +215,19 @@ public final class SearchResultPage implements BoundResource {
         params.put(name, value);
         return params;
     }
+
+    /**
+     * Rebuild the store's search index; {@code 202} once it has started, with no body to send.
+     * {@code POST /admin/search/reindex}
+     */
+    public ApiResponse reindexSearch() {
+        return reindexSearch(null);
+    }
+
+    public ApiResponse reindexSearch(RequestOptions options) {
+        return client.sendPostRequest(SearchResultPageUrls.SEARCH_REINDEX,
+                RequestOptions.builder(options)
+                        .dtoFactory(body -> Dto.fromMap(SearchResultPageDto.SearchReindex.class,
+                                body)).build());
+    }
 }

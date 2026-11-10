@@ -5,5 +5,5 @@ public final class TaxSettingsUrls {
 
     private TaxSettingsUrls() {}
 
-    public static final String TAX_SETTINGS = "/api/{api_version}/admin/tax/settings";
+    public static final String TAX_SETTINGS = "/api/{api_version}/admin/settings/tax";
 }

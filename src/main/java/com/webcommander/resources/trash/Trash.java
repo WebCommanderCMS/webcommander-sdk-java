@@ -9,6 +9,7 @@ import com.webcommander.client.WebCommanderClient;
 import com.webcommander.resources.trash.trash_dto.TrashDto.TrashBulkDeleteResult;
 import com.webcommander.resources.trash.trash_dto.TrashDto.TrashBulkInput;
 import com.webcommander.resources.trash.trash_dto.TrashDto.TrashBulkRestoreResult;
+import com.webcommander.resources.trash.trash_dto.TrashDto.TrashExternalLinks;
 import com.webcommander.resources.trash.trash_dto.TrashDto.TrashItem;
 import com.webcommander.resources.trash.trash_dto.TrashDto.TrashPage;
 import com.webcommander.resources.trash.trash_dto.TrashDto.TrashTypeList;
@@ -162,6 +163,22 @@ public final class Trash implements BoundResource {
 
     public ApiResponse bulkDeleteTrash(TrashBulkInput payload, RequestOptions options) {
         return bulkDeleteTrash((Object) payload, options);
+    }
+
+    /**
+     * The links outside the store that a permanent delete of a trashed item would break;
+     * {@code 404} for an item that is not in the trash.
+     * {@code GET /admin/trash/{trash_type}/{trash_item_id}/external_links}
+     */
+    public ApiResponse getTrashItemExternalLinks(String trashType, Object trashItemId) {
+        return getTrashItemExternalLinks(trashType, trashItemId, null);
+    }
+
+    public ApiResponse getTrashItemExternalLinks(String trashType, Object trashItemId,
+            RequestOptions options) {
+        return client.sendGetRequest(TrashUrls.TRASH_ITEM_EXTERNAL_LINKS,
+                RequestOptions.builder(options).pathParams(pathParams(trashType, trashItemId))
+                        .dtoFactory(body -> Dto.fromMap(TrashExternalLinks.class, body)).build());
     }
 
     private static Map<String, Object> pathParams(String trashType, Object trashItemId) {

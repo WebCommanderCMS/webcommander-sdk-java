@@ -481,7 +481,8 @@ public final class ProductsDto {
 
     /**
      * One review. {@code product_id}, {@code comment} and {@code created_at} repeat {@code
-     * productId}, {@code review} and {@code date}; {@code created_at} carries a {@code Z}.
+     * productId}, {@code review} and {@code date}; {@code created_at} carries a {@code Z}. A
+     * single review answers under {@code review}, which inside a row is its text.
      */
     public static final class ProductReview extends Dto {
 
@@ -509,6 +510,11 @@ public final class ProductsDto {
         public String comment;
 
         public String createdAt;
+
+        @Override
+        protected String envelopeKey() {
+            return "review";
+        }
     }
 
     /** One option of a variation type the product uses. */
@@ -1512,5 +1518,503 @@ public final class ProductsDto {
         public String note;
 
         public List<ProductStockLocationInput> locations;
+    }
+
+    /** The count's answer; {@code count} repeats {@code total}. */
+    public static final class ProductCount extends Dto {
+
+        public Long total;
+
+        public Long count;
+    }
+
+    /** The product that holds a SKU; {@code status} is {@code trashed} for one in the trash. */
+    public static final class ProductSkuHolder extends Dto {
+
+        public Long id;
+
+        public String name;
+
+        public String status;
+    }
+
+    /**
+     * A SKU's verdict: {@code available} and {@code is_exist} are opposites, {@code product} and
+     * {@code id} name the holder and are {@code null} or absent when the SKU is free. A variant's
+     * SKU names the variant's own product.
+     */
+    public static final class ProductSkuCheck extends Dto {
+
+        public Boolean available;
+
+        public Boolean isExist;
+
+        public ProductSkuHolder product;
+
+        public Long id;
+    }
+
+    /** One row of a special listing: a product's storefront prices. */
+    public static final class ProductSpecial extends Dto {
+
+        public Long id;
+
+        public String sku;
+
+        public String name;
+
+        public String image;
+
+        public Double basePrice;
+
+        public Boolean isOnSale;
+
+        public String onSaleAmountType;
+
+        public Double effectivePrice;
+
+        public Double actualBasePrice;
+
+        public Double onSaleAmount;
+
+        public Double expectToPayPrice;
+
+        public Double expectToPayPriceWithTax;
+
+        public Double taxExclusiveBasePrice;
+
+        public Double taxExclusiveSalePrice;
+
+        public Double tax;
+
+        public Double previousPriceToDisplay;
+
+        public Double actualPriceToDisplay;
+
+        public Double salePrice;
+
+        /** {@code yyyy-MM-ddTHH:mm:ss}. */
+        public String updated;
+
+        public String url;
+
+        public String summary;
+
+        public String description;
+    }
+
+    /**
+     * A special listing. {@code max} is the page size applied; {@code status} is {@code success}
+     * on a per-customer answer with no rows, and absent otherwise.
+     */
+    public static final class ProductSpecialPage extends Dto {
+
+        public String status;
+
+        public Long total;
+
+        public Long max;
+
+        public Long offset;
+
+        public List<ProductSpecial> products;
+
+        public Pagination pagination;
+    }
+
+    /** The bulk delete's body, no envelope: {@code ids} is required and must not be empty. */
+    public static final class ProductsBulkDeleteInput extends Dto {
+
+        public List<Long> ids;
+    }
+
+    /** One id the bulk delete did not trash; {@code reason} is {@code not_found} if unknown. */
+    public static final class ProductBulkDeleteError extends Dto {
+
+        public Long id;
+
+        public String reason;
+    }
+
+    /** The bulk delete's answer, {@code 200} even when an id failed: counts, and the failed ids. */
+    public static final class ProductsBulkDeleteResult extends Dto {
+
+        public Long deleted;
+
+        public Long failed;
+
+        public List<ProductBulkDeleteError> errors;
+    }
+
+    /** One product's reviews; the listing has no paging block. */
+    public static final class ProductReviewList extends Dto {
+
+        public List<ProductReview> reviews;
+    }
+
+    /** The review moderation body, no envelope; {@code status}: pending or approved. */
+    public static final class ProductReviewPatchInput extends Dto {
+
+        public String status;
+
+        public Double rating;
+
+        public String comment;
+    }
+
+    /** One image to store: {@code filename} and its {@code base64} content. */
+    public static final class ProductImageFileInput extends Dto {
+
+        public String filename;
+
+        public String base64;
+    }
+
+    /** The {@code image_and_video} block of an image upload. */
+    public static final class ProductImageAndVideoInput extends Dto {
+
+        public List<ProductImageFileInput> images;
+    }
+
+    /** The image upload's body, {@code {"product": {"image_and_video": {"images": [...]}}}}. */
+    public static final class ProductImageUploadInput extends Dto {
+
+        public ProductImageAndVideoInput imageAndVideo;
+
+        @Override
+        protected String envelopeKey() {
+            return "product";
+        }
+    }
+
+    /**
+     * What an upload answers: {@code product} holds the files just stored, {@code transaction_no}
+     * is the product's own.
+     */
+    public static final class ProductMediaUploaded extends Dto {
+
+        public ProductImageAndVideo product;
+
+        public String transactionNo;
+    }
+
+    /**
+     * The media upload's body, no envelope: {@code type} (only {@code images} is accepted),
+     * {@code filename} and {@code content}, base64 or a {@code data:} URI, and an optional 1-based
+     * {@code position}.
+     */
+    public static final class ProductMediaUploadInput extends Dto {
+
+        public String type;
+
+        public String filename;
+
+        public String content;
+
+        public Long position;
+    }
+
+    /** The stock figures a top-up writes. */
+    public static final class ProductInventoryStockInput extends Dto {
+
+        public Boolean trackInventory;
+
+        public Long availableStock;
+
+        public Long lowLevelStock;
+    }
+
+    /** The top-up's body, {@code {"product": {"product_pricing_and_stock": {...}}}}. */
+    public static final class ProductInventoryInput extends Dto {
+
+        public ProductInventoryStockInput productPricingAndStock;
+
+        @Override
+        protected String envelopeKey() {
+            return "product";
+        }
+    }
+
+    /**
+     * The top-up's answer. {@code transaction_no} is the product's own from before the write,
+     * {@code null} on its first top-up, though the header is stored on the product by then.
+     */
+    public static final class ProductInventoryResult extends Dto {
+
+        public String status;
+
+        public String message;
+
+        public String transactionNo;
+    }
+
+    /** The media order body, no envelope: {@code type} {@code images} and every image's id once. */
+    public static final class ProductMediaOrderInput extends Dto {
+
+        public String type;
+
+        public List<Long> ids;
+    }
+
+    /** The media order's answer: the product's images in their new order. */
+    public static final class ProductMediaOrder extends Dto {
+
+        public List<ProductMediaImage> images;
+    }
+
+    /** The image move body, no envelope: the 1-based {@code position}, the only field it takes. */
+    public static final class ProductMediaImagePatchInput extends Dto {
+
+        public Long position;
+    }
+
+    /** The robots and canonical URL settings. */
+    public static final class ProductSeoAdvancedSettings extends Dto {
+
+        public Boolean enabled;
+
+        public String robotsMeta;
+
+        public String canonicalUrl;
+    }
+
+    /** Which Google Analytics events the product page sends. */
+    public static final class ProductSeoGoogleAnalyticsEvents extends Dto {
+
+        public Boolean enabled;
+
+        public Boolean viewItem;
+
+        public Boolean viewItemList;
+
+        public Boolean viewCart;
+
+        public Boolean addToWishList;
+
+        public Boolean removeFromCart;
+
+        public Boolean beginCheckout;
+
+        public Boolean addShippingInfo;
+
+        public Boolean addPaymentInfo;
+
+        public Boolean purchase;
+    }
+
+    /** Google Analytics on the product page. */
+    public static final class ProductSeoGoogleAnalytics extends Dto {
+
+        public Boolean enabled;
+
+        public String measurementId;
+
+        public ProductSeoGoogleAnalyticsEvents events;
+    }
+
+    /** Which Facebook Pixel events the product page sends. */
+    public static final class ProductSeoFacebookPixelEvents extends Dto {
+
+        public Boolean enabled;
+
+        public Boolean search;
+
+        public Boolean addToCart;
+
+        public Boolean addToWishList;
+
+        public Boolean initiateCheckout;
+
+        public Boolean addPaymentInfo;
+
+        public Boolean purchase;
+    }
+
+    /** The Facebook Pixel on the product page. */
+    public static final class ProductSeoFacebookPixel extends Dto {
+
+        public Boolean enabled;
+
+        public String pixelId;
+
+        public ProductSeoFacebookPixelEvents events;
+    }
+
+    /** The Google Ads conversion the product page reports. */
+    public static final class ProductSeoGoogleAds extends Dto {
+
+        public String conversionId;
+
+        public String conversionLabel;
+    }
+
+    /** The product page's analytics settings. */
+    public static final class ProductSeoAnalytics extends Dto {
+
+        public Boolean enabled;
+
+        public String platform;
+
+        public ProductSeoGoogleAnalytics googleAnalytics;
+
+        public ProductSeoFacebookPixel facebookPixel;
+
+        public ProductSeoGoogleAds googleAds;
+    }
+
+    /** One custom code block and whether it is on. */
+    public static final class ProductSeoCode extends Dto {
+
+        public Boolean enabled;
+
+        public String code;
+    }
+
+    /** The custom code added to the product page's header and footer. */
+    public static final class ProductSeoCustomCode extends Dto {
+
+        public ProductSeoCode header;
+
+        public ProductSeoCode footer;
+    }
+
+    /** The title, description and image one network shows for the product. */
+    public static final class ProductSeoSocialCard extends Dto {
+
+        public String title;
+
+        public String description;
+
+        public String imageUrl;
+    }
+
+    /** The product's social card, and one per network. */
+    public static final class ProductSeoSocial extends Dto {
+
+        public String title;
+
+        public String description;
+
+        public String imageUrl;
+
+        public ProductSeoSocialCard facebook;
+
+        public ProductSeoSocialCard twitter;
+
+        public ProductSeoSocialCard linkedin;
+    }
+
+    /** What the product offers AI search; each field is {@code null} until set. */
+    public static final class ProductSeoAiVisibility extends Dto {
+
+        public Object structuredAttributes;
+
+        public Object productFaq;
+
+        public Object citabilityScore;
+
+        public Object jsonLd;
+    }
+
+    /** A product's SEO sub-resource, under {@code seo}. */
+    public static final class ProductSeo extends Dto {
+
+        public String urlHandle;
+
+        public String title;
+
+        public String description;
+
+        public ProductSeoAdvancedSettings advancedSettings;
+
+        public ProductSeoAnalytics analytics;
+
+        public ProductSeoCustomCode customCode;
+
+        public ProductSeoSocial social;
+
+        public ProductSeoAiVisibility aiVisibility;
+
+        @Override
+        protected String envelopeKey() {
+            return "seo";
+        }
+    }
+
+    /** A product's stock figure and low-stock level, with whether tracking is on. */
+    public static final class ProductStockTracking extends Dto {
+
+        public Boolean enabled;
+
+        public Long availableStock;
+
+        public Long lowStockLevel;
+    }
+
+    /** The stock block of the stock patch's answer. */
+    public static final class ProductStockSummary extends Dto {
+
+        public ProductStockTracking tracking;
+
+        public Boolean multiLocationEnabled;
+
+        public List<ProductStockLocation> locations;
+
+        public List<ProductStockVariation> variations;
+    }
+
+    /** The admin who made a stock change. */
+    public static final class ProductStockAdjustmentUser extends Dto {
+
+        public Long id;
+
+        public String name;
+    }
+
+    /** One stock change; {@code delta} is the new figure minus the old. */
+    public static final class ProductStockAdjustment extends Dto {
+
+        public Long id;
+
+        public Long delta;
+
+        public String note;
+
+        public String transactionNo;
+
+        public ProductStockAdjustmentUser createdBy;
+
+        public String createdAt;
+    }
+
+    /**
+     * The stock patch's body, no envelope. {@code tracking} merges; {@code locations} sets the
+     * stock per location; {@code note} and {@code transaction_no} go on the adjustment.
+     */
+    public static final class ProductStockPatchInput extends Dto {
+
+        public ProductStockTracking tracking;
+
+        public List<ProductStockLocationInput> locations;
+
+        public String note;
+
+        public String transactionNo;
+    }
+
+    /** The stock patch's answer: the stock now, and the adjustment it recorded. */
+    public static final class ProductStockPatchResult extends Dto {
+
+        public ProductStockSummary stock;
+
+        public ProductStockAdjustment adjustment;
+    }
+
+    /** One page of a product's stock history. */
+    public static final class ProductStockAdjustmentPage extends Dto {
+
+        public List<ProductStockAdjustment> adjustments;
+
+        public Pagination pagination;
     }
 }

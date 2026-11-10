@@ -10,6 +10,8 @@ public final class SearchResultPageUrls {
     public static final String SEARCH_RESULT_PAGE =
             "/api/{api_version}/admin/settings/page_settings/search_result_page";
 
+    public static final String SEARCH_REINDEX = "/api/{api_version}/admin/search/reindex";
+
     public static final String SEARCH_RESULT_PAGE_SECTION =
             "/api/{api_version}/admin/settings/page_settings/search_result_page/{section}";
 

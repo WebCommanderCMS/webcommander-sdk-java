@@ -6,6 +6,7 @@ import com.webcommander.client.BoundResource;
 import com.webcommander.client.RequestOptions;
 import com.webcommander.client.ResourceBinding;
 import com.webcommander.client.WebCommanderClient;
+import com.webcommander.errors.SdkUsageError;
 import com.webcommander.resources.settings.animation_effects.animation_effects_dto
         .AnimationEffectsDto;
 
@@ -93,6 +94,39 @@ public final class AnimationEffects implements BoundResource {
                         .jsonBody(payload)
                         .dtoFactory(body -> Dto.fromMap(
                                 AnimationEffectsDto.AnimationEffects.class, body)).build());
+    }
+
+    /**
+     * Upload the custom preloader image; the part is {@code file} (svg, png, jpg, jpeg or gif).
+     * {@code 201}, and the loader reads {@code enabled: true}.
+     * {@code POST /admin/settings/animation_effects/custom_loader}
+     */
+    public ApiResponse uploadAnimationEffectsCustomLoader(Map<String, Object> files) {
+        return uploadAnimationEffectsCustomLoader(files, null);
+    }
+
+    public ApiResponse uploadAnimationEffectsCustomLoader(Map<String, Object> files,
+            RequestOptions options) {
+        if (files == null || files.isEmpty()) {
+            throw new SdkUsageError("files is required (part name 'file')");
+        }
+        return client.sendPostRequest(AnimationEffectsUrls.ANIMATION_EFFECTS_CUSTOM_LOADER,
+                RequestOptions.builder(options).files(files)
+                        .dtoFactory(body -> Dto.fromMap(
+                                AnimationEffectsDto.CustomLoaderSection.class, body)).build());
+    }
+
+    /**
+     * Remove the custom preloader image; {@code 204}, also when there is none.
+     * {@code DELETE /admin/settings/animation_effects/custom_loader}
+     */
+    public ApiResponse deleteAnimationEffectsCustomLoader() {
+        return deleteAnimationEffectsCustomLoader(null);
+    }
+
+    public ApiResponse deleteAnimationEffectsCustomLoader(RequestOptions options) {
+        return client.sendDeleteRequest(AnimationEffectsUrls.ANIMATION_EFFECTS_CUSTOM_LOADER,
+                RequestOptions.builder(options).dtoFactory(null).build());
     }
 
     private static Map<String, Object> pathParams(String name, Object value) {

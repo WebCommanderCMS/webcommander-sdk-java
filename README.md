@@ -20,11 +20,11 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>com.webcommander</groupId>
     <artifactId>webcommander</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
 </dependency>
 ```
 
-Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.0"`.
+Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.1"`.
 
 ## Quick start
 
@@ -191,14 +191,14 @@ body carries `"isSuccess": false` (the store's answer to a mistyped path) counts
 
 ## Resources
 
-The client exposes 46 resources with 349 operations. The [API reference](https://newlify.mintlify.app)
+The client exposes 56 resources with 436 operations. The [API reference](https://newlify.mintlify.app)
 lists the method, path and behaviour of each one.
 
 | Resource | Client accessor | Operations |
 |---|---|---:|
 | [Customers](https://newlify.mintlify.app) | `client.adminCustomers()` | 15 |
 | [Aliases](https://newlify.mintlify.app) | `client.aliases()` | 4 |
-| [Animation effects settings](https://newlify.mintlify.app) | `client.animationEffects()` | 5 |
+| [Animation effects settings](https://newlify.mintlify.app) | `client.animationEffects()` | 7 |
 | [Blog categories](https://newlify.mintlify.app) | `client.blogCategories()` | 5 |
 | [Blogs](https://newlify.mintlify.app) | `client.blogs()` | 12 |
 | [Carts](https://newlify.mintlify.app) | `client.carts()` | 7 |
@@ -211,24 +211,34 @@ lists the method, path and behaviour of each one.
 | [Currencies](https://newlify.mintlify.app) | `client.currencies()` | 11 |
 | [Customer groups](https://newlify.mintlify.app) | `client.customerGroups()` | 9 |
 | [Customer portal settings](https://newlify.mintlify.app) | `client.customerPortal()` | 5 |
+| [Dashboard banners](https://newlify.mintlify.app) | `client.dashboardBanners()` | 6 |
+| [Dashboard KPIs](https://newlify.mintlify.app) | `client.dashboardKpis()` | 3 |
+| [Dashboard reports](https://newlify.mintlify.app) | `client.dashboardReports()` | 6 |
+| [Dashboard sections](https://newlify.mintlify.app) | `client.dashboardSections()` | 1 |
+| [Dashboards](https://newlify.mintlify.app) | `client.dashboards()` | 5 |
 | [Discount profiles](https://newlify.mintlify.app) | `client.discountProfiles()` | 7 |
 | [Ecommerce settings](https://newlify.mintlify.app) | `client.ecommerceSettings()` | 5 |
 | [Email](https://newlify.mintlify.app) | `client.email()` | 1 |
+| [Gift cards](https://newlify.mintlify.app) | `client.giftCards()` | 1 |
 | [Inventory locations](https://newlify.mintlify.app) | `client.inventoryLocations()` | 11 |
 | [Order custom fields](https://newlify.mintlify.app) | `client.orderCustomFields()` | 4 |
 | [Order flags](https://newlify.mintlify.app) | `client.orderFlags()` | 7 |
+| [Order previews](https://newlify.mintlify.app) | `client.orderPreviews()` | 7 |
 | [Orders](https://newlify.mintlify.app) | `client.orders()` | 25 |
 | [Pages](https://newlify.mintlify.app) | `client.pages()` | 15 |
 | [Payment gateways](https://newlify.mintlify.app) | `client.paymentGateways()` | 8 |
 | [Price display settings](https://newlify.mintlify.app) | `client.priceDisplaySettings()` | 5 |
 | [Product listing settings](https://newlify.mintlify.app) | `client.productListing()` | 3 |
 | [Product page settings](https://newlify.mintlify.app) | `client.productPage()` | 5 |
-| [Products](https://newlify.mintlify.app) | `client.products()` | 10 |
-| [Search result page settings](https://newlify.mintlify.app) | `client.searchResultPage()` | 13 |
+| [Products](https://newlify.mintlify.app) | `client.products()` | 27 |
+| [Search result page settings](https://newlify.mintlify.app) | `client.searchResultPage()` | 14 |
 | [Search settings](https://newlify.mintlify.app) | `client.searchSettings()` | 9 |
 | [SEO configuration](https://newlify.mintlify.app) | `client.seoConfiguration()` | 18 |
 | [Shipping classes](https://newlify.mintlify.app) | `client.shippingClasses()` | 9 |
 | [Shipping methods](https://newlify.mintlify.app) | `client.shippingMethods()` | 9 |
+| [Shipping profiles](https://newlify.mintlify.app) | `client.shippingProfiles()` | 11 |
+| [Shipping rates](https://newlify.mintlify.app) | `client.shippingRates()` | 10 |
+| [Shipping rules](https://newlify.mintlify.app) | `client.shippingRules()` | 10 |
 | [Shipping settings](https://newlify.mintlify.app) | `client.shippingSettings()` | 3 |
 | [Shopping cart settings](https://newlify.mintlify.app) | `client.shoppingCart()` | 5 |
 | [Site settings](https://newlify.mintlify.app) | `client.siteSettings()` | 5 |
@@ -237,11 +247,11 @@ lists the method, path and behaviour of each one.
 | [Tax custom profiles](https://newlify.mintlify.app) | `client.taxCustomProfiles()` | 5 |
 | [Tax profiles](https://newlify.mintlify.app) | `client.taxProfiles()` | 7 |
 | [Tax rules](https://newlify.mintlify.app) | `client.taxRules()` | 7 |
-| [Tax settings](https://newlify.mintlify.app) | `client.taxSettings()` | 2 |
+| [Tax settings](https://newlify.mintlify.app) | `client.taxSettings()` | 4 |
 | [Tax zones](https://newlify.mintlify.app) | `client.taxZones()` | 7 |
 | [Transactions](https://newlify.mintlify.app) | `client.transactions()` | 6 |
-| [Trash](https://newlify.mintlify.app) | `client.trash()` | 8 |
-| [Variations](https://newlify.mintlify.app) | `client.variations()` | 12 |
+| [Trash](https://newlify.mintlify.app) | `client.trash()` | 9 |
+| [Variations](https://newlify.mintlify.app) | `client.variations()` | 16 |
 
 Each resource's path templates are constants on its `<Resource>Urls` class, and its typed views
 are nested in the `<Resource>Dto` class of the `<resource>_dto` package beside it. The Javadoc on

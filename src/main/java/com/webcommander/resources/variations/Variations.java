@@ -6,6 +6,12 @@ import com.webcommander.client.BoundResource;
 import com.webcommander.client.RequestOptions;
 import com.webcommander.client.ResourceBinding;
 import com.webcommander.client.WebCommanderClient;
+import com.webcommander.resources.variations.variations_dto.VariationsDto
+        .ProductVariantDetail;
+import com.webcommander.resources.variations.variations_dto.VariationsDto
+        .ProductVariantPatchInput;
+import com.webcommander.resources.variations.variations_dto.VariationsDto
+        .ProductVariantPatchResult;
 import com.webcommander.resources.variations.variations_dto.VariationsDto.ProductVariations;
 import com.webcommander.resources.variations.variations_dto.VariationsDto
         .ProductVariationsBulkInput;
@@ -279,6 +285,90 @@ public final class Variations implements BoundResource {
             ProductVariationsBulkInput payload, Map<String, Object> queryParams,
             RequestOptions options) {
         return updateProductVariations(productId, (Object) payload, queryParams, options);
+    }
+
+    /**
+     * Read one variant under {@code variation} —
+     * {@code GET /admin/products/{product_id}/variations/{variation_id}}. {@code variationId} is a
+     * variant's {@code variation_id}, the {@code id} the list also carries; it is not the
+     * variant's own {@code product_id}. It reads {@code active} where the list reads
+     * {@code available}.
+     */
+    public ApiResponse getProductVariation(Object productId, Object variationId) {
+        return getProductVariation(productId, variationId, null);
+    }
+
+    public ApiResponse getProductVariation(Object productId, Object variationId,
+            RequestOptions options) {
+        return client.sendGetRequest(VariationsUrls.PRODUCT_VARIATION,
+                RequestOptions.builder(options).pathParams(variantPathParams(productId, variationId))
+                        .dtoFactory(body -> Dto.fromMap(ProductVariantDetail.class, body))
+                        .build());
+    }
+
+    /**
+     * Delete one variant; {@code 204}, and a second delete is {@code 404}. {@code variationId} is
+     * a variant's {@code variation_id}.
+     * {@code DELETE /admin/products/{product_id}/variations/{variation_id}}
+     */
+    public ApiResponse deleteProductVariation(Object productId, Object variationId) {
+        return deleteProductVariation(productId, variationId, null);
+    }
+
+    public ApiResponse deleteProductVariation(Object productId, Object variationId,
+            RequestOptions options) {
+        return client.sendDeleteRequest(VariationsUrls.PRODUCT_VARIATION,
+                RequestOptions.builder(options).pathParams(variantPathParams(productId, variationId))
+                        .dtoFactory(null).build());
+    }
+
+    /**
+     * Change one variant; a bare, partial body. A SKU another variant holds is {@code 409}.
+     * {@code PATCH /admin/products/{product_id}/variations/{variation_id}}
+     */
+    public ApiResponse patchProductVariation(Object productId, Object variationId,
+            Object payload) {
+        return patchProductVariation(productId, variationId, payload, null);
+    }
+
+    public ApiResponse patchProductVariation(Object productId, Object variationId,
+            Object payload, RequestOptions options) {
+        ResourceBinding.requirePayload(payload);
+        return client.sendPatchRequest(VariationsUrls.PRODUCT_VARIATION,
+                RequestOptions.builder(options).pathParams(variantPathParams(productId, variationId))
+                        .jsonBody(payload)
+                        .dtoFactory(body -> Dto.fromMap(ProductVariantPatchResult.class, body))
+                        .build());
+    }
+
+    public ApiResponse patchProductVariation(Object productId, Object variationId,
+            ProductVariantPatchInput payload) {
+        return patchProductVariation(productId, variationId, (Object) payload, null);
+    }
+
+    public ApiResponse patchProductVariation(Object productId, Object variationId,
+            ProductVariantPatchInput payload, RequestOptions options) {
+        return patchProductVariation(productId, variationId, (Object) payload, options);
+    }
+
+    /**
+     * Delete every variant of a product; {@code 204}, also when it has none.
+     * {@code DELETE /admin/products/{product_id}/variations}
+     */
+    public ApiResponse deleteProductVariations(Object productId) {
+        return deleteProductVariations(productId, null);
+    }
+
+    public ApiResponse deleteProductVariations(Object productId, RequestOptions options) {
+        return client.sendDeleteRequest(VariationsUrls.PRODUCT_VARIATIONS,
+                RequestOptions.builder(options).pathParams(pathParams("product_id", productId))
+                        .dtoFactory(null).build());
+    }
+
+    private static Map<String, Object> variantPathParams(Object productId, Object variationId) {
+        Map<String, Object> params = pathParams("product_id", productId);
+        params.put("variation_id", variationId);
+        return params;
     }
 
     private static Map<String, Object> pathParams(String name, Object value) {

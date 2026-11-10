@@ -6,5 +6,5 @@ public final class ShippingSettingsUrls {
     private ShippingSettingsUrls() {}
 
     public static final String SHIPPING_SETTINGS =
-            "/api/{api_version}/admin/settings/shipping_settings";
+            "/api/{api_version}/admin/settings/shipping_settings/general";
 }

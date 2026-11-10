@@ -32,11 +32,18 @@ import com.webcommander.resources.countries.Countries;
 import com.webcommander.resources.currencies.Currencies;
 import com.webcommander.resources.customer_groups.CustomerGroups;
 import com.webcommander.resources.customers.AdminCustomers;
+import com.webcommander.resources.dashboard_banners.DashboardBanners;
+import com.webcommander.resources.dashboard_kpis.DashboardKpis;
+import com.webcommander.resources.dashboard_reports.DashboardReports;
+import com.webcommander.resources.dashboard_sections.DashboardSections;
+import com.webcommander.resources.dashboards.Dashboards;
 import com.webcommander.resources.discount_profiles.DiscountProfiles;
 import com.webcommander.resources.email.Email;
+import com.webcommander.resources.gift_cards.GiftCards;
 import com.webcommander.resources.inventory_locations.InventoryLocations;
 import com.webcommander.resources.order_custom_fields.OrderCustomFields;
 import com.webcommander.resources.order_flags.OrderFlags;
+import com.webcommander.resources.order_previews.OrderPreviews;
 import com.webcommander.resources.orders.Orders;
 import com.webcommander.resources.pages.Pages;
 import com.webcommander.resources.payment_gateways.PaymentGateways;
@@ -57,6 +64,9 @@ import com.webcommander.resources.settings.shipping_settings.ShippingSettings;
 import com.webcommander.resources.settings.site_settings.SiteSettings;
 import com.webcommander.resources.shipping_classes.ShippingClasses;
 import com.webcommander.resources.shipping_methods.ShippingMethods;
+import com.webcommander.resources.shipping_profiles.ShippingProfiles;
+import com.webcommander.resources.shipping_rates.ShippingRates;
+import com.webcommander.resources.shipping_rules.ShippingRules;
 import com.webcommander.resources.tax_codes.TaxCodes;
 import com.webcommander.resources.tax_country_taxes.TaxCountryTaxes;
 import com.webcommander.resources.tax_custom_profiles.TaxCustomProfiles;
@@ -287,6 +297,41 @@ public final class WebCommanderClient implements AutoCloseable {
         return (OrderFlags) resource("orderFlags");
     }
 
+    /** The order preview endpoints, bound to this client. */
+    public OrderPreviews orderPreviews() {
+        return (OrderPreviews) resource("orderPreviews");
+    }
+
+    /** The gift card endpoints, bound to this client. */
+    public GiftCards giftCards() {
+        return (GiftCards) resource("giftCards");
+    }
+
+    /** The dashboard banner endpoints, bound to this client. */
+    public DashboardBanners dashboardBanners() {
+        return (DashboardBanners) resource("dashboardBanners");
+    }
+
+    /** The dashboard KPI endpoints, bound to this client. */
+    public DashboardKpis dashboardKpis() {
+        return (DashboardKpis) resource("dashboardKpis");
+    }
+
+    /** The dashboard report endpoints, bound to this client. */
+    public DashboardReports dashboardReports() {
+        return (DashboardReports) resource("dashboardReports");
+    }
+
+    /** The dashboard section endpoints, bound to this client. */
+    public DashboardSections dashboardSections() {
+        return (DashboardSections) resource("dashboardSections");
+    }
+
+    /** The dashboard layout endpoints, bound to this client. */
+    public Dashboards dashboards() {
+        return (Dashboards) resource("dashboards");
+    }
+
     /** The inventory location endpoints, bound to this client. */
     public InventoryLocations inventoryLocations() {
         return (InventoryLocations) resource("inventoryLocations");
@@ -335,6 +380,21 @@ public final class WebCommanderClient implements AutoCloseable {
     /** The shipping class endpoints, bound to this client. */
     public ShippingClasses shippingClasses() {
         return (ShippingClasses) resource("shippingClasses");
+    }
+
+    /** The shipping profile endpoints, bound to this client. */
+    public ShippingProfiles shippingProfiles() {
+        return (ShippingProfiles) resource("shippingProfiles");
+    }
+
+    /** The shipping rate endpoints, bound to this client. */
+    public ShippingRates shippingRates() {
+        return (ShippingRates) resource("shippingRates");
+    }
+
+    /** The shipping rule endpoints, bound to this client. */
+    public ShippingRules shippingRules() {
+        return (ShippingRules) resource("shippingRules");
     }
 
     /** The domain alias endpoints, bound to this client. */

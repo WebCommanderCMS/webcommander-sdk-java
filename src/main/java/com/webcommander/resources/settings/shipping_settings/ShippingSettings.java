@@ -11,7 +11,7 @@ import com.webcommander.resources.settings.shipping_settings.shipping_settings_d
 
 import java.util.Map;
 
-/** Shipping settings — {@code /api/{api_version}/admin/settings/shipping_settings}. */
+/** Shipping settings — {@code /api/{api_version}/admin/settings/shipping_settings/general}. */
 public final class ShippingSettings implements BoundResource {
 
     private final WebCommanderClient client;
@@ -20,7 +20,7 @@ public final class ShippingSettings implements BoundResource {
         this.client = client;
     }
 
-    /** Read the whole area — {@code GET /admin/settings/shipping_settings}. */
+    /** Read the whole area — {@code GET /admin/settings/shipping_settings/general}. */
     public ApiResponse getShippingSettings() {
         return getShippingSettings(null, null);
     }
@@ -37,7 +37,9 @@ public final class ShippingSettings implements BoundResource {
                                 ShippingSettingsDto.ShippingSettings.class, body)).build());
     }
 
-    /** Write one field or several — {@code PATCH /admin/settings/shipping_settings}. */
+    /**
+     * Write one field or several — {@code PATCH /admin/settings/shipping_settings/general}.
+     */
     public ApiResponse patchShippingSettings(Object payload) {
         return patchShippingSettings(payload, null);
     }
@@ -50,7 +52,9 @@ public final class ShippingSettings implements BoundResource {
                                 ShippingSettingsDto.ShippingSettings.class, body)).build());
     }
 
-    /** Ask whether the area is reachable — {@code HEAD /admin/settings/shipping_settings}. */
+    /**
+     * Ask whether the area is reachable — {@code HEAD /admin/settings/shipping_settings/general}.
+     */
     public ApiResponse headShippingSettings() {
         return headShippingSettings(null);
     }

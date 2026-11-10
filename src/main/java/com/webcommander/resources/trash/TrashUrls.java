@@ -15,6 +15,9 @@ public final class TrashUrls {
     public static final String TRASH_ITEM_RESTORE =
             "/api/{api_version}/admin/trash/{trash_type}/{trash_item_id}/restore";
 
+    public static final String TRASH_ITEM_EXTERNAL_LINKS =
+            "/api/{api_version}/admin/trash/{trash_type}/{trash_item_id}/external_links";
+
     public static final String TRASH_BULK_RESTORE = "/api/{api_version}/admin/trash/bulk-restore";
 
     public static final String TRASH_BULK_DELETE = "/api/{api_version}/admin/trash/bulk-delete";

@@ -179,4 +179,10 @@ public final class AnimationEffectsDto {
             return "animation_effects";
         }
     }
+
+    /** The {@code custom_loader} section: the uploaded preloader image, or {@code enabled: false}. */
+    public static final class CustomLoaderSection extends Dto {
+
+        public CustomLoader customLoader;
+    }
 }
