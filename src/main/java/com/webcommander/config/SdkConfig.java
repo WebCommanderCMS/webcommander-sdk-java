@@ -860,6 +860,11 @@ public final class SdkConfig {
         return auth.getAuthString();
     }
 
+    /** The Hykmah origin that issues the token, or {@code null} for the store. */
+    public String getAuthBaseUrl() {
+        return auth.getAuthBaseUrl();
+    }
+
     public String getClientName() {
         return auth.getClientName();
     }

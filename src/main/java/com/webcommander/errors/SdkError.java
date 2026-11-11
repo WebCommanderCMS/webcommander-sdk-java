@@ -283,7 +283,8 @@ public class SdkError extends RuntimeException {
         hints.put(400, "the API rejected the request itself - check the payload shape and "
                 + "the query parameter names against the endpoint's documentation");
         hints.put(401, "credentials were rejected, or the token expired and could not be "
-                + "renewed - check clientId, clientSecret and authString");
+                + "renewed - check clientId, clientSecret and authString, or authBaseUrl "
+                + "for a Hykmah client");
         hints.put(403, "authenticated, but this client is not allowed to do that");
         hints.put(404, "no such record - check the id you passed actually exists");
         hints.put(405, "wrong HTTP method for this path");

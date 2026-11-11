@@ -111,9 +111,10 @@ public final class FileTokenStore implements TokenStore {
     /** The secret and the auth string go into the key, never into the file. */
     public static String buildCredentialsNamespace(
             String baseUrl, String clientId, String clientSecret,
-            String authString, String grantType) {
+            String authString, String grantType, String authBaseUrl) {
         StringBuilder material = new StringBuilder();
-        for (String value : new String[] {"v3", baseUrl, clientId, clientSecret, authString, grantType}) {
+        for (String value : new String[] {
+                "v4", baseUrl, clientId, clientSecret, authString, grantType, authBaseUrl}) {
             String text = value == null ? "" : value;
             material.append(text.codePointCount(0, text.length())).append(':').append(text);
         }

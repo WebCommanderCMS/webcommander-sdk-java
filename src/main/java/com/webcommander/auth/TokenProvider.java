@@ -24,6 +24,8 @@ public final class TokenProvider {
 
     /** Carries the same {@code {api_version}} placeholder as every other path constant here. */
     public static final String TOKEN_PATH_TEMPLATE = "/api/{api_version}/oauth2/token";
+    /** The token path on the Hykmah origin set as {@code authBaseUrl}. */
+    public static final String HYKMAH_TOKEN_PATH = "/api/v1/oauth/token";
     private static final String API_VERSION_PLACEHOLDER = "{api_version}";
     private static final String REFRESH_GRANT_TYPE = "refresh_token";
 
@@ -37,6 +39,8 @@ public final class TokenProvider {
     private final Transport transport;
     private final TokenStore tokenStore;
     private final String tokenPath;
+    private final String tokenBaseUrl;
+    private final boolean usesHykmah;
     private final ReentrantLock threadLock = new ReentrantLock();
 
     /** The transport's TLS and retry settings govern authentication too. */
@@ -44,11 +48,14 @@ public final class TokenProvider {
         this.config = config;
         this.transport = transport;
         this.tokenStore = tokenStore;
-        this.tokenPath = buildTokenPath(config.getApiVersion());
+        this.usesHykmah = config.getAuth().usesHykmah();
+        this.tokenPath = usesHykmah ? HYKMAH_TOKEN_PATH : buildTokenPath(config.getApiVersion());
+        this.tokenBaseUrl = usesHykmah ? config.getAuthBaseUrl() : config.getBaseUrl();
     }
 
+    /** The Hykmah origin when {@code authBaseUrl} is set, otherwise the store's base URL. */
     public String getTokenUrl() {
-        return config.getBaseUrl() + tokenPath;
+        return tokenBaseUrl + tokenPath;
     }
 
     /** Never {@code null}: a refused grant raises {@link SdkAuthError} instead. */
@@ -117,17 +124,16 @@ public final class TokenProvider {
     }
 
     private TokenRecord requestTokenWithCredentials() {
-        ApiResponse response = transport.sendHttpRequest(
-                Transport.TransportRequest.builder("POST", getTokenUrl())
-                        .jsonBody(credentialsPayload())
-                        .headers(tokenHeaders())
-                        .build());
+        ApiResponse response = sendTokenRequest(credentialsPayload());
         if (!response.succeeded()) {
             boolean detail = SdkError.showsFullDetail();
             List<String> messages = detail ? response.getErrorMessages() : List.of();
             SdkAuthError error = new SdkAuthError(
                     "token request failed with " + response.getStatusCode()
-                            + (messages.isEmpty() ? "" : ": " + messages.get(0)),
+                            + (messages.isEmpty() ? "" : ": " + messages.get(0))
+                            + (usesHykmah
+                                    ? "; check clientId, clientSecret, grantType and authBaseUrl"
+                                    : ""),
                     response.getStatusCode(),
                     response.getErrorType(),
                     detail ? Redaction.redactValue(response.getMap()) : null,
@@ -142,6 +148,13 @@ public final class TokenProvider {
     }
 
     private Map<String, Object> credentialsPayload() {
+        if (usesHykmah) {
+            Map<String, Object> payload = new LinkedHashMap<>();
+            payload.put("grant_type", config.getAuth().getGrantType());
+            payload.put("client_id", config.getAuth().getClientId());
+            payload.put("client_secret", config.getAuth().getClientSecret());
+            return payload;
+        }
         return grantPayload(config.getAuth().getGrantType(),
                 "auth_string", config.getAuth().getAuthString());
     }
@@ -150,20 +163,27 @@ public final class TokenProvider {
         Map<String, Object> payload = new LinkedHashMap<>();
         payload.put("grant_type", grantType);
         payload.put(grantKey, grantValue);
-        payload.put("redirect_uri", config.getAuth().getRedirectUri());
+        if (!usesHykmah) {
+            payload.put("redirect_uri", config.getAuth().getRedirectUri());
+        }
         payload.put("client_id", config.getAuth().getClientId());
         payload.put("client_secret", config.getAuth().getClientSecret());
         return payload;
     }
 
+    /** A form to Hykmah, which refuses JSON; JSON with the redirect URI to the store. */
+    private ApiResponse sendTokenRequest(Map<String, Object> payload) {
+        Transport.TransportRequest.Builder request =
+                Transport.TransportRequest.builder("POST", getTokenUrl())
+                        .headers(tokenHeaders());
+        return transport.sendHttpRequest(
+                (usesHykmah ? request.formData(payload) : request.jsonBody(payload)).build());
+    }
+
     private TokenRecord requestTokenWithRefreshGrant(String refreshToken) {
         Map<String, Object> payload = grantPayload(REFRESH_GRANT_TYPE, "refresh_token", refreshToken);
         try {
-            ApiResponse response = transport.sendHttpRequest(
-                    Transport.TransportRequest.builder("POST", getTokenUrl())
-                            .jsonBody(payload)
-                            .headers(tokenHeaders())
-                            .build());
+            ApiResponse response = sendTokenRequest(payload);
             if (!response.succeeded()) {
                 return null;
             }
@@ -181,7 +201,9 @@ public final class TokenProvider {
 
     private Map<String, String> tokenHeaders() {
         Map<String, String> headers = new LinkedHashMap<>();
-        headers.put("Content-Type", "application/json");
+        if (!usesHykmah) {
+            headers.put("Content-Type", "application/json");
+        }
         headers.put("Accept", "application/json");
         headers.put("User-Agent", config.getUserAgent());
         return headers;

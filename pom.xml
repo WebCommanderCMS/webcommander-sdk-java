@@ -7,7 +7,7 @@
     <groupId>com.webcommander</groupId>
     <artifactId>webcommander</artifactId>
     <!-- maven-jar-plugin writes the version into the manifest that SdkConfig.SDK_VERSION reads. -->
-    <version>4.0.1</version>
+    <version>4.0.2</version>
     <packaging>jar</packaging>
 
     <name>WebCommander</name>

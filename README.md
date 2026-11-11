@@ -20,11 +20,11 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>com.webcommander</groupId>
     <artifactId>webcommander</artifactId>
-    <version>4.0.1</version>
+    <version>4.0.2</version>
 </dependency>
 ```
 
-Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.1"`.
+Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.2"`.
 
 ## Quick start
 
@@ -72,6 +72,25 @@ is `AutoCloseable`, so try-with-resources releases its connections.
 Customers are identified by `customer_id`. A customer record also carries `internal_id`, a second
 id space that overlaps the first, so passing it where a path expects `{customer_id}` can return a
 different customer.
+
+### Hykmah sign-in
+
+A store whose API client was issued through Hykmah gets its token from Hykmah instead of from
+the store. Pass the Hykmah address as `authBaseUrl`; `redirectUri` and `authString` are not
+needed:
+
+```java
+AuthConfig auth = AuthConfig.builder()
+        .baseUrl(System.getenv("WC_BASE_URL"))
+        .clientId(System.getenv("WC_CLIENT_ID"))
+        .clientSecret(System.getenv("WC_CLIENT_SECRET"))
+        .authBaseUrl(System.getenv("WC_AUTH_BASE_URL"))
+        .clientName("default")
+        .build();
+```
+
+Only the token request goes to `authBaseUrl`. Every API call still goes to `baseUrl`. Leave
+`authBaseUrl` unset to get the token from the store with `redirectUri` and `authString`.
 
 ## Configuration
 

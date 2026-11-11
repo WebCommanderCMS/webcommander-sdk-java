@@ -27,11 +27,15 @@ public final class AuthConfig {
     /** The fields {@link #toString()} delegates to {@link Redaction#redactFields}. */
     private static final List<String> REPR_FIELDS = List.of(
             "baseUrl", "clientId", "clientSecret", "redirectUri", "authString",
-            "clientName", "grantType", "tokenCachePath");
+            "clientName", "grantType", "tokenCachePath", "authBaseUrl");
 
     /** The fields with no default, in declaration order. */
     private static final List<String> REQUIRED_FIELDS = List.of(
             "baseUrl", "clientId", "clientSecret", "redirectUri", "authString", "clientName");
+
+    /** Required when {@code authBaseUrl} is set: Hykmah issues the token from the client alone. */
+    private static final List<String> HYKMAH_REQUIRED_FIELDS = List.of(
+            "baseUrl", "clientId", "clientSecret", "clientName");
 
     private final String baseUrl;
     private final String clientId;
@@ -41,6 +45,7 @@ public final class AuthConfig {
     private final String clientName;
     private final String grantType;
     private final String tokenCachePath;
+    private final String authBaseUrl;
 
     private AuthConfig(Builder builder) {
         this.baseUrl = normaliseBaseUrl(builder.baseUrl);
@@ -51,6 +56,7 @@ public final class AuthConfig {
         this.clientName = builder.clientName;
         this.grantType = builder.grantType;
         this.tokenCachePath = builder.tokenCachePath;
+        this.authBaseUrl = normaliseAuthBaseUrl(builder.authBaseUrl);
         validate();
     }
 
@@ -70,6 +76,7 @@ public final class AuthConfig {
         copy.clientName = clientName;
         copy.grantType = grantType;
         copy.tokenCachePath = tokenCachePath;
+        copy.authBaseUrl = authBaseUrl;
         return copy;
     }
 
@@ -116,6 +123,16 @@ public final class AuthConfig {
         return tokenCachePath;
     }
 
+    /** The Hykmah origin that issues the token, or {@code null} to ask the store at the base URL. */
+    public String getAuthBaseUrl() {
+        return authBaseUrl;
+    }
+
+    /** Whether the token comes from Hykmah rather than from the store itself. */
+    public boolean usesHykmah() {
+        return authBaseUrl != null;
+    }
+
     /** Credentials redacted, so safe to log. */
     @Override
     public String toString() {
@@ -140,17 +157,20 @@ public final class AuthConfig {
         if (isBlank(clientSecret)) {
             missing.add("clientSecret");
         }
-        if (isBlank(redirectUri)) {
+        if (authBaseUrl == null && isBlank(redirectUri)) {
             missing.add("redirectUri");
         }
-        if (isBlank(authString)) {
+        if (authBaseUrl == null && isBlank(authString)) {
             missing.add("authString");
         }
         if (!missing.isEmpty()) {
             problems.add("missing required values: " + String.join(", ", missing));
         }
         if (!isBlank(baseUrl)) {
-            problems.addAll(problemsWithTheBaseUrl(baseUrl));
+            problems.addAll(problemsWithTheBaseUrl(baseUrl, "baseUrl"));
+        }
+        if (authBaseUrl != null) {
+            problems.addAll(problemsWithTheBaseUrl(authBaseUrl, "authBaseUrl"));
         }
         if (isBlank(clientName)) {
             problems.add("clientName: must not be blank");
@@ -187,11 +207,17 @@ public final class AuthConfig {
         return trimmed;
     }
 
-    private static List<String> problemsWithTheBaseUrl(String baseUrl) {
+    /** Blank means not set, so an empty {@code .env} entry keeps the store flow. */
+    private static String normaliseAuthBaseUrl(String raw) {
+        String trimmed = normaliseBaseUrl(raw);
+        return trimmed == null || trimmed.isEmpty() ? null : trimmed;
+    }
+
+    private static List<String> problemsWithTheBaseUrl(String baseUrl, String name) {
         List<String> problems = new ArrayList<>();
         UrlBuilder.Authority parsed = UrlBuilder.Authority.split(baseUrl);
         if (parsed.isPortMalformed()) {
-            problems.add("baseUrl: is not a URL (" + parsed.getAuthorityProblem() + ")");
+            problems.add(name + ": is not a URL (" + parsed.getAuthorityProblem() + ")");
             return problems;
         }
         String scheme = parsed.getScheme();
@@ -199,19 +225,19 @@ public final class AuthConfig {
             String shown = Redaction.redactText(baseUrl);
             boolean unrewrittenUserinfo =
                     shown.indexOf('@') >= 0 && !shown.contains(Redaction.REDACTED + "@");
-            problems.add("baseUrl: must start with http:// or https:// and include a host"
+            problems.add(name + ": must start with http:// or https:// and include a host"
                     + (unrewrittenUserinfo
                             ? ". The value is not shown: it may carry credentials"
                             : ", got '" + shown + "'"));
             return problems;
         }
         if (parsed.getUserInfo() != null) {
-            problems.add("baseUrl: host " + parsed.getHost() + " carries embedded credentials, "
+            problems.add(name + ": host " + parsed.getHost() + " carries embedded credentials, "
                     + "which would replace the bearer token; strip the userinfo");
         }
         int mark = indexOfAny(baseUrl, '?', '#');
         if (mark >= 0) {
-            problems.add("baseUrl: must be the instance origin only, with no query string "
+            problems.add(name + ": must be the origin only, with no query string "
                     + "or fragment, got '" + Redaction.redactText(baseUrl) + "'");
         }
         return problems;
@@ -251,6 +277,7 @@ public final class AuthConfig {
         private String clientName;
         private String grantType = DEFAULT_GRANT_TYPE;
         private String tokenCachePath = USE_DEFAULT_TOKEN_CACHE;
+        private String authBaseUrl;
 
         public Builder() {
         }
@@ -299,6 +326,15 @@ public final class AuthConfig {
             return this;
         }
 
+        /**
+         * The Hykmah origin that issues the token. Blank or {@code null} asks the store; set, it
+         * makes {@code redirectUri} and {@code authString} optional.
+         */
+        public Builder authBaseUrl(String authBaseUrl) {
+            this.authBaseUrl = authBaseUrl;
+            return this;
+        }
+
         /** The readable spelling of {@code tokenCachePath(null)}: nothing on disk. */
         public Builder memoryOnlyTokenCache() {
             return tokenCachePath(null);
@@ -312,7 +348,8 @@ public final class AuthConfig {
 
     static List<String> absentRequiredFields(Set<String> suppliedNames) {
         List<String> absent = new ArrayList<>();
-        for (String field : REQUIRED_FIELDS) {
+        boolean hykmah = suppliedNames.contains("auth_base_url");
+        for (String field : hykmah ? HYKMAH_REQUIRED_FIELDS : REQUIRED_FIELDS) {
             String name = snakeCase(field);
             if (!suppliedNames.contains(name)) {
                 absent.add(name);

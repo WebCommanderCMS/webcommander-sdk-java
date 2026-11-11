@@ -192,7 +192,7 @@ public final class WebCommanderClient implements AutoCloseable {
 
     private static String fingerprint(AuthConfig auth) {
         return FileTokenStore.buildCredentialsNamespace(auth.getBaseUrl(), auth.getClientId(),
-                auth.getClientSecret(), auth.getAuthString(), auth.getGrantType());
+                auth.getClientSecret(), auth.getAuthString(), auth.getGrantType(), auth.getAuthBaseUrl());
     }
 
     /** The configuration this client was built from, every default already resolved. */
