@@ -39,10 +39,10 @@ public final class OrdersUrls {
             "/api/{api_version}/admin/orders/{order_id}/update-status";
 
     public static final String ORDER_CUSTOM_FIELDS =
-            "/api/{api_version}/admin/orders/{order_internal_id}/custom_fields";
+            "/api/{api_version}/admin/orders/{order_id}/custom_fields";
 
     public static final String ORDER_SEND_INVOICE =
-            "/api/{api_version}/admin/orders/{order_internal_id}/send-invoice";
+            "/api/{api_version}/admin/orders/{order_id}/send-invoice";
 
     public static final String PAYMENT_REFUNDS =
             "/api/{api_version}/admin/payment/{payment_id}/refunds";

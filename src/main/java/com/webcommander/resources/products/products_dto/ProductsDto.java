@@ -44,8 +44,8 @@ public final class ProductsDto {
     }
 
     /**
-     * One customer an audience names: {@code id} is the customer's {@code customer_id}, {@code
-     * internal_id} its {@code internal_id}.
+     * One customer an audience names: {@code id} is the customer's {@code customer_id}; {@code
+     * internal_id} is for reference.
      */
     public static final class ProductSelectedCustomer extends Dto {
 

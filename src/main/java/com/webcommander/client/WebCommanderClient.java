@@ -31,6 +31,7 @@ import com.webcommander.resources.common_settings.CommonSettings;
 import com.webcommander.resources.countries.Countries;
 import com.webcommander.resources.currencies.Currencies;
 import com.webcommander.resources.customer_groups.CustomerGroups;
+import com.webcommander.resources.carts.AdminCarts;
 import com.webcommander.resources.customers.AdminCustomers;
 import com.webcommander.resources.dashboard_banners.DashboardBanners;
 import com.webcommander.resources.dashboard_kpis.DashboardKpis;
@@ -43,7 +44,6 @@ import com.webcommander.resources.gift_cards.GiftCards;
 import com.webcommander.resources.inventory_locations.InventoryLocations;
 import com.webcommander.resources.order_custom_fields.OrderCustomFields;
 import com.webcommander.resources.order_flags.OrderFlags;
-import com.webcommander.resources.order_previews.OrderPreviews;
 import com.webcommander.resources.orders.Orders;
 import com.webcommander.resources.pages.Pages;
 import com.webcommander.resources.payment_gateways.PaymentGateways;
@@ -217,6 +217,11 @@ public final class WebCommanderClient implements AutoCloseable {
         return boundResources.computeIfAbsent(resourceName, name -> factory.apply(this));
     }
 
+    /** The admin cart and checkout endpoints, bound to this client. */
+    public AdminCarts adminCarts() {
+        return (AdminCarts) resource("adminCarts");
+    }
+
     /** The admin customer endpoints, bound to this client. */
     public AdminCustomers adminCustomers() {
         return (AdminCustomers) resource("adminCustomers");
@@ -295,11 +300,6 @@ public final class WebCommanderClient implements AutoCloseable {
     /** The order flag endpoints, bound to this client. */
     public OrderFlags orderFlags() {
         return (OrderFlags) resource("orderFlags");
-    }
-
-    /** The order preview endpoints, bound to this client. */
-    public OrderPreviews orderPreviews() {
-        return (OrderPreviews) resource("orderPreviews");
     }
 
     /** The gift card endpoints, bound to this client. */

@@ -346,8 +346,8 @@ public final class Products implements BoundResource {
      * List a special selection of products — {@code GET /admin/products/special}. {@code type}
      * is required: {@code onSale}, {@code featured}, {@code new}, {@code topSelling},
      * {@code lastBought} or {@code lastViewed}. {@code max} (1 to 100, default 10) and
-     * {@code offset} page it. The last two are per customer and need {@code customerId} (the
-     * {@code customer_id} or {@code internal_id} of a customer) or {@code customer_email};
+     * {@code offset} page it. The last two are per customer and need {@code customerId} (a
+     * customer's {@code customer_id}) or {@code customer_email};
      * {@code customer_id} is not read, and an unknown customer is {@code 400 unknown_reference}.
      * A name it does not know is ignored.
      */

@@ -46,16 +46,6 @@ public final class InventoryLocations implements BoundResource {
                         .build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/inventory_locations}. */
-    public ApiResponse headInventoryLocations() {
-        return headInventoryLocations(null);
-    }
-
-    public ApiResponse headInventoryLocations(RequestOptions options) {
-        return client.sendApiRequest("HEAD", InventoryLocationsUrls.INVENTORY_LOCATIONS,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** Create a location — {@code POST /admin/inventory_locations}; the body takes no envelope. */
     public ApiResponse createInventoryLocation(Object payload) {
         return createInventoryLocation(payload, null);
@@ -86,17 +76,6 @@ public final class InventoryLocations implements BoundResource {
         return client.sendGetRequest(InventoryLocationsUrls.INVENTORY_LOCATION,
                 RequestOptions.builder(options).pathParams(pathParams(inventoryLocationId))
                         .dtoFactory(body -> Dto.fromMap(InventoryLocation.class, body)).build());
-    }
-
-    /** Probe one location — {@code HEAD /admin/inventory_locations/{inventory_location_id}}. */
-    public ApiResponse headInventoryLocation(Object inventoryLocationId) {
-        return headInventoryLocation(inventoryLocationId, null);
-    }
-
-    public ApiResponse headInventoryLocation(Object inventoryLocationId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", InventoryLocationsUrls.INVENTORY_LOCATION,
-                RequestOptions.builder(options).pathParams(pathParams(inventoryLocationId))
-                        .dtoFactory(null).build());
     }
 
     /** Replace one location — {@code PUT /admin/inventory_locations/{inventory_location_id}}. */

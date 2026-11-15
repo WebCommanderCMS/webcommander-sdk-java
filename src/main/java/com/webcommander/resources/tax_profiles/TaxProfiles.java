@@ -37,16 +37,6 @@ public final class TaxProfiles implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(TaxProfilePage.class, body)).build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/tax_profiles}. */
-    public ApiResponse headTaxProfiles() {
-        return headTaxProfiles(null);
-    }
-
-    public ApiResponse headTaxProfiles(RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxProfilesUrls.TAX_PROFILES,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** Create a tax profile — {@code POST /admin/tax_profiles}, wrapped in {@code tax_profile}. */
     public ApiResponse createTaxProfile(Object payload) {
         return createTaxProfile(payload, null);
@@ -76,17 +66,6 @@ public final class TaxProfiles implements BoundResource {
         return client.sendGetRequest(TaxProfilesUrls.TAX_PROFILE,
                 RequestOptions.builder(options).pathParams(pathParams(taxProfileId))
                         .dtoFactory(body -> Dto.fromMap(TaxProfile.class, body)).build());
-    }
-
-    /** Probe one tax profile — {@code HEAD /admin/tax_profiles/{tax_profile_id}}. */
-    public ApiResponse headTaxProfile(Object taxProfileId) {
-        return headTaxProfile(taxProfileId, null);
-    }
-
-    public ApiResponse headTaxProfile(Object taxProfileId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxProfilesUrls.TAX_PROFILE,
-                RequestOptions.builder(options).pathParams(pathParams(taxProfileId))
-                        .dtoFactory(null).build());
     }
 
     /** Update one tax profile — {@code PUT /admin/tax_profiles/{tax_profile_id}}. */

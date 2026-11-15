@@ -54,10 +54,15 @@ public final class BlogsDto {
         public String name;
     }
 
-    /** One customer, by {@code internal_id}, or one customer group a blog is shown to. */
+    /**
+     * One customer, by {@code customer_id}, or one customer group a blog is shown to. A customer
+     * also carries its {@code internal_id}, for reference.
+     */
     public static final class BlogAudienceMember extends Dto {
 
         public Long id;
+
+        public Long internalId;
 
         public String name;
     }
@@ -73,7 +78,7 @@ public final class BlogsDto {
     /** The audience a write names. */
     public static final class BlogAudienceInput extends Dto {
 
-        /** Customer {@code internal_id} values. */
+        /** Customer {@code customer_id} values. */
         public List<Long> customers;
 
         /** Customer group ids. */

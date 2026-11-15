@@ -218,7 +218,7 @@ public final class CartsDto {
 
         public Long quantity;
 
-        /** The customer's {@code internal_id}. */
+        /** The customer's {@code customer_id}. */
         public Long customerId;
 
         public String sessionId;

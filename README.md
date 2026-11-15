@@ -20,11 +20,11 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>com.webcommander</groupId>
     <artifactId>webcommander</artifactId>
-    <version>4.0.2</version>
+    <version>4.0.3</version>
 </dependency>
 ```
 
-Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.2"`.
+Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.3"`.
 
 ## Quick start
 
@@ -210,11 +210,12 @@ body carries `"isSuccess": false` (the store's answer to a mistyped path) counts
 
 ## Resources
 
-The client exposes 56 resources with 436 operations. The [API reference](https://newlify.mintlify.app)
+The client exposes 56 resources with 435 operations. The [API reference](https://newlify.mintlify.app)
 lists the method, path and behaviour of each one.
 
 | Resource | Client accessor | Operations |
 |---|---|---:|
+| [Admin carts](https://newlify.mintlify.app) | `client.adminCarts()` | 19 |
 | [Customers](https://newlify.mintlify.app) | `client.adminCustomers()` | 15 |
 | [Aliases](https://newlify.mintlify.app) | `client.aliases()` | 4 |
 | [Animation effects settings](https://newlify.mintlify.app) | `client.animationEffects()` | 7 |
@@ -239,10 +240,9 @@ lists the method, path and behaviour of each one.
 | [Ecommerce settings](https://newlify.mintlify.app) | `client.ecommerceSettings()` | 5 |
 | [Email](https://newlify.mintlify.app) | `client.email()` | 1 |
 | [Gift cards](https://newlify.mintlify.app) | `client.giftCards()` | 1 |
-| [Inventory locations](https://newlify.mintlify.app) | `client.inventoryLocations()` | 11 |
+| [Inventory locations](https://newlify.mintlify.app) | `client.inventoryLocations()` | 9 |
 | [Order custom fields](https://newlify.mintlify.app) | `client.orderCustomFields()` | 4 |
-| [Order flags](https://newlify.mintlify.app) | `client.orderFlags()` | 7 |
-| [Order previews](https://newlify.mintlify.app) | `client.orderPreviews()` | 7 |
+| [Order flags](https://newlify.mintlify.app) | `client.orderFlags()` | 5 |
 | [Orders](https://newlify.mintlify.app) | `client.orders()` | 25 |
 | [Pages](https://newlify.mintlify.app) | `client.pages()` | 15 |
 | [Payment gateways](https://newlify.mintlify.app) | `client.paymentGateways()` | 8 |
@@ -253,21 +253,21 @@ lists the method, path and behaviour of each one.
 | [Search result page settings](https://newlify.mintlify.app) | `client.searchResultPage()` | 14 |
 | [Search settings](https://newlify.mintlify.app) | `client.searchSettings()` | 9 |
 | [SEO configuration](https://newlify.mintlify.app) | `client.seoConfiguration()` | 18 |
-| [Shipping classes](https://newlify.mintlify.app) | `client.shippingClasses()` | 9 |
-| [Shipping methods](https://newlify.mintlify.app) | `client.shippingMethods()` | 9 |
+| [Shipping classes](https://newlify.mintlify.app) | `client.shippingClasses()` | 7 |
+| [Shipping methods](https://newlify.mintlify.app) | `client.shippingMethods()` | 7 |
 | [Shipping profiles](https://newlify.mintlify.app) | `client.shippingProfiles()` | 11 |
 | [Shipping rates](https://newlify.mintlify.app) | `client.shippingRates()` | 10 |
 | [Shipping rules](https://newlify.mintlify.app) | `client.shippingRules()` | 10 |
 | [Shipping settings](https://newlify.mintlify.app) | `client.shippingSettings()` | 3 |
 | [Shopping cart settings](https://newlify.mintlify.app) | `client.shoppingCart()` | 5 |
 | [Site settings](https://newlify.mintlify.app) | `client.siteSettings()` | 5 |
-| [Tax codes](https://newlify.mintlify.app) | `client.taxCodes()` | 7 |
+| [Tax codes](https://newlify.mintlify.app) | `client.taxCodes()` | 5 |
 | [Tax country taxes](https://newlify.mintlify.app) | `client.taxCountryTaxes()` | 5 |
 | [Tax custom profiles](https://newlify.mintlify.app) | `client.taxCustomProfiles()` | 5 |
-| [Tax profiles](https://newlify.mintlify.app) | `client.taxProfiles()` | 7 |
-| [Tax rules](https://newlify.mintlify.app) | `client.taxRules()` | 7 |
+| [Tax profiles](https://newlify.mintlify.app) | `client.taxProfiles()` | 5 |
+| [Tax rules](https://newlify.mintlify.app) | `client.taxRules()` | 5 |
 | [Tax settings](https://newlify.mintlify.app) | `client.taxSettings()` | 4 |
-| [Tax zones](https://newlify.mintlify.app) | `client.taxZones()` | 7 |
+| [Tax zones](https://newlify.mintlify.app) | `client.taxZones()` | 5 |
 | [Transactions](https://newlify.mintlify.app) | `client.transactions()` | 6 |
 | [Trash](https://newlify.mintlify.app) | `client.trash()` | 9 |
 | [Variations](https://newlify.mintlify.app) | `client.variations()` | 16 |

@@ -12,6 +12,7 @@ import com.webcommander.resources.common_settings.CommonSettings;
 import com.webcommander.resources.countries.Countries;
 import com.webcommander.resources.currencies.Currencies;
 import com.webcommander.resources.customer_groups.CustomerGroups;
+import com.webcommander.resources.carts.AdminCarts;
 import com.webcommander.resources.customers.AdminCustomers;
 import com.webcommander.resources.dashboard_banners.DashboardBanners;
 import com.webcommander.resources.dashboard_kpis.DashboardKpis;
@@ -24,7 +25,6 @@ import com.webcommander.resources.gift_cards.GiftCards;
 import com.webcommander.resources.inventory_locations.InventoryLocations;
 import com.webcommander.resources.order_custom_fields.OrderCustomFields;
 import com.webcommander.resources.order_flags.OrderFlags;
-import com.webcommander.resources.order_previews.OrderPreviews;
 import com.webcommander.resources.orders.Orders;
 import com.webcommander.resources.pages.Pages;
 import com.webcommander.resources.payment_gateways.PaymentGateways;
@@ -73,6 +73,7 @@ public final class ResourceBinding {
             RESOURCE_FACTORIES = new ConcurrentHashMap<>();
 
     static {
+        RESOURCE_FACTORIES.put("adminCarts", AdminCarts::new);
         RESOURCE_FACTORIES.put("adminCustomers", AdminCustomers::new);
         RESOURCE_FACTORIES.put("seoConfiguration", SeoConfiguration::new);
         RESOURCE_FACTORIES.put("searchResultPage", SearchResultPage::new);
@@ -89,7 +90,6 @@ public final class ResourceBinding {
         RESOURCE_FACTORIES.put("searchSettings", SearchSettings::new);
         RESOURCE_FACTORIES.put("ecommerceSettings", EcommerceSettings::new);
         RESOURCE_FACTORIES.put("orderFlags", OrderFlags::new);
-        RESOURCE_FACTORIES.put("orderPreviews", OrderPreviews::new);
         RESOURCE_FACTORIES.put("giftCards", GiftCards::new);
         RESOURCE_FACTORIES.put("dashboardBanners", DashboardBanners::new);
         RESOURCE_FACTORIES.put("dashboardKpis", DashboardKpis::new);

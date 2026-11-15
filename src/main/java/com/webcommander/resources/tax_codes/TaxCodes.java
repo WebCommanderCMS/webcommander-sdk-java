@@ -37,16 +37,6 @@ public final class TaxCodes implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(TaxCodePage.class, body)).build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/tax_codes}. */
-    public ApiResponse headTaxCodes() {
-        return headTaxCodes(null);
-    }
-
-    public ApiResponse headTaxCodes(RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxCodesUrls.TAX_CODES,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** Create a tax code — {@code POST /admin/tax_codes}, wrapped in {@code tax_code}. */
     public ApiResponse createTaxCode(Object payload) {
         return createTaxCode(payload, null);
@@ -76,17 +66,6 @@ public final class TaxCodes implements BoundResource {
         return client.sendGetRequest(TaxCodesUrls.TAX_CODE,
                 RequestOptions.builder(options).pathParams(pathParams(taxCodeId))
                         .dtoFactory(body -> Dto.fromMap(TaxCode.class, body)).build());
-    }
-
-    /** Probe one tax code — {@code HEAD /admin/tax_codes/{tax_code_id}}. */
-    public ApiResponse headTaxCode(Object taxCodeId) {
-        return headTaxCode(taxCodeId, null);
-    }
-
-    public ApiResponse headTaxCode(Object taxCodeId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxCodesUrls.TAX_CODE,
-                RequestOptions.builder(options).pathParams(pathParams(taxCodeId)).dtoFactory(null)
-                        .build());
     }
 
     /** Update one tax code — {@code PUT /admin/tax_codes/{tax_code_id}}. */

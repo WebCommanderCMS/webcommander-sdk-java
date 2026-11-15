@@ -300,15 +300,15 @@ public final class Orders implements BoundResource {
         return createOrderComment(orderId, (Object) payload, options);
     }
 
-    /** An order's custom fields, by its {@code internal_id} — {@code GET .../custom_fields}. */
-    public ApiResponse getOrderCustomFields(Object orderInternalId) {
-        return getOrderCustomFields(orderInternalId, null);
+    /** An order's custom fields — {@code GET /admin/orders/{order_id}/custom_fields}. */
+    public ApiResponse getOrderCustomFields(Object orderId) {
+        return getOrderCustomFields(orderId, null);
     }
 
-    public ApiResponse getOrderCustomFields(Object orderInternalId, RequestOptions options) {
+    public ApiResponse getOrderCustomFields(Object orderId, RequestOptions options) {
         return client.sendGetRequest(OrdersUrls.ORDER_CUSTOM_FIELDS,
                 RequestOptions.builder(options)
-                        .pathParams(pathParams("order_internal_id", orderInternalId))
+                        .pathParams(pathParams("order_id", orderId))
                         .dtoFactory(body -> Dto.fromMap(OrderCustomFields.class, body)).build());
     }
 
@@ -410,15 +410,15 @@ public final class Orders implements BoundResource {
         return createPaymentRefund(paymentId, (Object) payload, idempotencyKey, options);
     }
 
-    /** Email the invoice, by the order's {@code internal_id} — {@code POST .../send-invoice}. */
-    public ApiResponse sendOrderInvoice(Object orderInternalId) {
-        return sendOrderInvoice(orderInternalId, null);
+    /** Email the invoice — {@code POST /admin/orders/{order_id}/send-invoice}; no body. */
+    public ApiResponse sendOrderInvoice(Object orderId) {
+        return sendOrderInvoice(orderId, null);
     }
 
-    public ApiResponse sendOrderInvoice(Object orderInternalId, RequestOptions options) {
+    public ApiResponse sendOrderInvoice(Object orderId, RequestOptions options) {
         return client.sendPostRequest(OrdersUrls.ORDER_SEND_INVOICE,
                 RequestOptions.builder(options)
-                        .pathParams(pathParams("order_internal_id", orderInternalId))
+                        .pathParams(pathParams("order_id", orderId))
                         .dtoFactory(body -> Dto.fromMap(InvoiceDispatch.class, body)).build());
     }
 

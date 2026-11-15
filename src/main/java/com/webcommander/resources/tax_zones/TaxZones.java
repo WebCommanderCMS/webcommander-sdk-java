@@ -37,16 +37,6 @@ public final class TaxZones implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(TaxZonePage.class, body)).build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/tax_zones}. */
-    public ApiResponse headTaxZones() {
-        return headTaxZones(null);
-    }
-
-    public ApiResponse headTaxZones(RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxZonesUrls.TAX_ZONES,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** Create a tax zone — {@code POST /admin/tax_zones}, wrapped in {@code tax_zone}. */
     public ApiResponse createTaxZone(Object payload) {
         return createTaxZone(payload, null);
@@ -76,17 +66,6 @@ public final class TaxZones implements BoundResource {
         return client.sendGetRequest(TaxZonesUrls.TAX_ZONE,
                 RequestOptions.builder(options).pathParams(pathParams(taxZoneId))
                         .dtoFactory(body -> Dto.fromMap(TaxZone.class, body)).build());
-    }
-
-    /** Probe one tax zone — {@code HEAD /admin/tax_zones/{tax_zone_id}}. */
-    public ApiResponse headTaxZone(Object taxZoneId) {
-        return headTaxZone(taxZoneId, null);
-    }
-
-    public ApiResponse headTaxZone(Object taxZoneId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxZonesUrls.TAX_ZONE,
-                RequestOptions.builder(options).pathParams(pathParams(taxZoneId)).dtoFactory(null)
-                        .build());
     }
 
     /** Update one tax zone — {@code PUT /admin/tax_zones/{tax_zone_id}}; a replace. */

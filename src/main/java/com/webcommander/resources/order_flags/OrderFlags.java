@@ -37,16 +37,6 @@ public final class OrderFlags implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(OrderFlagPage.class, body)).build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/order_flags}. */
-    public ApiResponse headOrderFlags() {
-        return headOrderFlags(null);
-    }
-
-    public ApiResponse headOrderFlags(RequestOptions options) {
-        return client.sendApiRequest("HEAD", OrderFlagsUrls.ORDER_FLAGS,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** Create a flag — {@code POST /admin/order_flags}, wrapped in {@code order_flag}. */
     public ApiResponse createOrderFlag(Object payload) {
         return createOrderFlag(payload, null);
@@ -76,17 +66,6 @@ public final class OrderFlags implements BoundResource {
         return client.sendGetRequest(OrderFlagsUrls.ORDER_FLAG,
                 RequestOptions.builder(options).pathParams(pathParams(orderFlagId))
                         .dtoFactory(body -> Dto.fromMap(OrderFlag.class, body)).build());
-    }
-
-    /** Probe one flag — {@code HEAD /admin/order_flags/{order_flag_id}}. */
-    public ApiResponse headOrderFlag(Object orderFlagId) {
-        return headOrderFlag(orderFlagId, null);
-    }
-
-    public ApiResponse headOrderFlag(Object orderFlagId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", OrderFlagsUrls.ORDER_FLAG,
-                RequestOptions.builder(options).pathParams(pathParams(orderFlagId)).dtoFactory(null)
-                        .build());
     }
 
     /** Replace one flag — {@code PUT /admin/order_flags/{order_flag_id}}. */

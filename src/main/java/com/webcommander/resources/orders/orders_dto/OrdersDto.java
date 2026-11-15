@@ -508,10 +508,12 @@ public final class OrdersDto {
         public List<OrderComment> comments;
     }
 
-    /** An order's custom field values; {@code order_id} echoes the {@code internal_id} sent. */
+    /** An order's custom field values; a {@code delivery} order adds {@code delivery_cost}. */
     public static final class OrderCustomFields extends Dto {
 
         public Long orderId;
+
+        public Long internalId;
 
         public List<Object> customFields;
 
@@ -613,8 +615,7 @@ public final class OrdersDto {
     }
 
     /**
-     * One refund an order holds. {@code order_id} is the order's internal id. A payment refund
-     * fills {@code record_only} to {@code lines}; an order refund leaves them {@code null} and
+     * One refund an order holds. A payment refund fills {@code record_only} to {@code lines}; an order refund leaves them {@code null} and
      * {@code lines} empty. {@code gateway_charge_id}, {@code gateway_refund_id} and
      * {@code failure_cause} were {@code null} on every refund read, so they are not typed.
      */
@@ -664,12 +665,13 @@ public final class OrdersDto {
     }
 
     /**
-     * One page of an order's refunds, newest first. {@code order_id} is the order's internal id
-     * and {@code order_no} the {@code {order_id}} the path took.
+     * One page of an order's refunds, newest first; {@code order_no} equals {@code order_id}.
      */
     public static final class OrderRefundPage extends Dto {
 
         public Long orderId;
+
+        public Long internalId;
 
         public Long orderNo;
 
@@ -678,7 +680,7 @@ public final class OrdersDto {
         public Pagination pagination;
     }
 
-    /** What a payment refund answers; {@code order_id} holds the order's internal id. */
+    /** What a payment refund answers; {@code order_no} equals {@code order_id}. */
     public static final class PaymentRefund extends Dto {
 
         public String status;
@@ -688,6 +690,8 @@ public final class OrdersDto {
         public Long paymentId;
 
         public Long orderId;
+
+        public Long internalId;
 
         public Long orderNo;
 

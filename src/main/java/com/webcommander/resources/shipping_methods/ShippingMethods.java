@@ -43,16 +43,6 @@ public final class ShippingMethods implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(ShippingMethodPage.class, body)).build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/shipping_methods}. */
-    public ApiResponse headShippingMethods() {
-        return headShippingMethods(null);
-    }
-
-    public ApiResponse headShippingMethods(RequestOptions options) {
-        return client.sendApiRequest("HEAD", ShippingMethodsUrls.SHIPPING_METHODS,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** How many methods the store holds — {@code GET /admin/shipping_methods/count}. */
     public ApiResponse countShippingMethods() {
         return countShippingMethods(null, null);
@@ -105,17 +95,6 @@ public final class ShippingMethods implements BoundResource {
                 RequestOptions.builder(options).pathParams(pathParams(shippingMethodId))
                         .queryParams(queryParams)
                         .dtoFactory(body -> Dto.fromMap(ShippingMethod.class, body)).build());
-    }
-
-    /** Probe one method — {@code HEAD /admin/shipping_methods/{shipping_method_id}}. */
-    public ApiResponse headShippingMethod(Object shippingMethodId) {
-        return headShippingMethod(shippingMethodId, null);
-    }
-
-    public ApiResponse headShippingMethod(Object shippingMethodId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", ShippingMethodsUrls.SHIPPING_METHOD,
-                RequestOptions.builder(options).pathParams(pathParams(shippingMethodId))
-                        .dtoFactory(null).build());
     }
 
     /** Rename one method — {@code PUT /admin/shipping_methods/{shipping_method_id}}. */

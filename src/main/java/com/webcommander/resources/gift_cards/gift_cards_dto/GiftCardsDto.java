@@ -11,9 +11,9 @@ public final class GiftCardsDto {
     }
 
     /**
-     * One gift card. {@code code} is what an order preview's {@code gift-card} call takes; a card
+     * One gift card. {@code code} is what a checkout's {@code gift_card} call takes; a card
      * can be applied only while {@code is_active} and {@code is_paid}, with a {@code balance} above
-     * zero, before its {@code available_to} date and with {@code email} equal to the previewed
+     * zero, before its {@code available_to} date and with {@code email} equal to the cart
      * customer's email.
      */
     public static final class GiftCard extends Dto {

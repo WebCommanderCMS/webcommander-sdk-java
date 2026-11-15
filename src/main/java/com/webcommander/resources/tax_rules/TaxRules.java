@@ -37,16 +37,6 @@ public final class TaxRules implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(TaxRulePage.class, body)).build());
     }
 
-    /** Ask whether the collection is reachable — {@code HEAD /admin/tax_rules}. */
-    public ApiResponse headTaxRules() {
-        return headTaxRules(null);
-    }
-
-    public ApiResponse headTaxRules(RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxRulesUrls.TAX_RULES,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** Create a tax rule — {@code POST /admin/tax_rules}, wrapped in {@code tax_rule}. */
     public ApiResponse createTaxRule(Object payload) {
         return createTaxRule(payload, null);
@@ -76,17 +66,6 @@ public final class TaxRules implements BoundResource {
         return client.sendGetRequest(TaxRulesUrls.TAX_RULE,
                 RequestOptions.builder(options).pathParams(pathParams(taxRuleId))
                         .dtoFactory(body -> Dto.fromMap(TaxRule.class, body)).build());
-    }
-
-    /** Probe one tax rule — {@code HEAD /admin/tax_rules/{tax_rule_id}}. */
-    public ApiResponse headTaxRule(Object taxRuleId) {
-        return headTaxRule(taxRuleId, null);
-    }
-
-    public ApiResponse headTaxRule(Object taxRuleId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", TaxRulesUrls.TAX_RULE,
-                RequestOptions.builder(options).pathParams(pathParams(taxRuleId)).dtoFactory(null)
-                        .build());
     }
 
     /** Update one tax rule — {@code PUT /admin/tax_rules/{tax_rule_id}}. */

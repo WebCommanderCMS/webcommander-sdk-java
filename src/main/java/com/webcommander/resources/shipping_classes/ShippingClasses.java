@@ -43,16 +43,6 @@ public final class ShippingClasses implements BoundResource {
                         .dtoFactory(body -> Dto.fromMap(ShippingClassPage.class, body)).build());
     }
 
-    /** Ask whether the collection answers — {@code HEAD /admin/shipping_classes}. */
-    public ApiResponse headShippingClasses() {
-        return headShippingClasses(null);
-    }
-
-    public ApiResponse headShippingClasses(RequestOptions options) {
-        return client.sendApiRequest("HEAD", ShippingClassesUrls.SHIPPING_CLASSES,
-                RequestOptions.builder(options).dtoFactory(null).build());
-    }
-
     /** How many classes the store holds — {@code GET /admin/shipping_classes/count}. */
     public ApiResponse countShippingClasses() {
         return countShippingClasses(null, null);
@@ -104,17 +94,6 @@ public final class ShippingClasses implements BoundResource {
                 RequestOptions.builder(options).pathParams(pathParams(shippingClassId))
                         .queryParams(queryParams)
                         .dtoFactory(body -> Dto.fromMap(ShippingClass.class, body)).build());
-    }
-
-    /** Probe one class — {@code HEAD /admin/shipping_classes/{shipping_class_id}}. */
-    public ApiResponse headShippingClass(Object shippingClassId) {
-        return headShippingClass(shippingClassId, null);
-    }
-
-    public ApiResponse headShippingClass(Object shippingClassId, RequestOptions options) {
-        return client.sendApiRequest("HEAD", ShippingClassesUrls.SHIPPING_CLASS,
-                RequestOptions.builder(options).pathParams(pathParams(shippingClassId))
-                        .dtoFactory(null).build());
     }
 
     /** Replace one class — {@code PUT /admin/shipping_classes/{shipping_class_id}}. */
