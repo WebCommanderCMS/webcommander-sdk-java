@@ -13,6 +13,10 @@ public final class ShippingRulesUrls {
     public static final String SHIPPING_RULE =
             "/api/{api_version}/admin/shipping_rules/{shipping_rule_id}";
 
-    /** Files the record under a transaction number; it wins over a {@code transaction_no} in the body. */
+    /**
+     * Files the record under a transaction number; a different {@code transaction_no} beside the
+     * {@code shipping_rule} wrapper is refused with {@code 400 header_body_mismatch}, and one
+     * inside the wrapper is ignored.
+     */
     public static final String TRANSACTION_NO_HEADER = "X-Transaction-No";
 }

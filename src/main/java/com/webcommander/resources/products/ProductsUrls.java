@@ -56,6 +56,11 @@ public final class ProductsUrls {
     /** The key every product write answers under; only the review import takes it as a wrapper. */
     public static final String PRODUCT_KEY = "product";
 
-    /** Tags a create with a transaction number; it wins over a body one it disagrees with. */
+    /**
+     * Tags a create with a transaction number; a different body {@code transaction_no} at the
+     * place the store checks it (top level for a create, beside {@code product} for a review
+     * import) is refused with {@code 400 header_body_mismatch}, and one elsewhere in the body is
+     * ignored.
+     */
     public static final String TRANSACTION_NO_HEADER = "X-Transaction-No";
 }

@@ -31,8 +31,8 @@ public final class AdminCartsUrls {
             "/api/{api_version}/admin/orders/checkout/{session_id}/delivery_schedules";
 
     /**
-     * Files the order a checkout places under this transaction number; it beats
-     * {@code transaction_no}.
+     * Files the order a checkout places under this transaction number; a different top-level
+     * {@code transaction_no} in the body is refused with {@code 400 header_body_mismatch}.
      */
     public static final String TRANSACTION_NO_HEADER = "X-Transaction-No";
 }

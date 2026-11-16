@@ -21,6 +21,9 @@ public final class VariationsUrls {
     public static final String PRODUCT_VARIATIONS_BULK =
             "/api/{api_version}/admin/products/{product_id}/variations/bulk";
 
-    /** Tags a create with a transaction number; it wins over a body one it disagrees with. */
+    /**
+     * Tags a create with a transaction number; a different top-level {@code transaction_no} in the
+     * body is refused with {@code 400 header_body_mismatch}.
+     */
     public static final String TRANSACTION_NO_HEADER = "X-Transaction-No";
 }

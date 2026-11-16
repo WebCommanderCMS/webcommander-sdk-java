@@ -20,11 +20,11 @@ Add the dependency to your `pom.xml`:
 <dependency>
     <groupId>com.webcommander</groupId>
     <artifactId>webcommander</artifactId>
-    <version>4.0.3</version>
+    <version>4.0.4</version>
 </dependency>
 ```
 
-Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.3"`.
+Maven resolves it from Maven Central. For Gradle, use `implementation "com.webcommander:webcommander:4.0.4"`.
 
 ## Quick start
 
